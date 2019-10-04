@@ -1,0 +1,18 @@
+host:
+GreatBay.db.4473603.faf.hostedresource.net
+
+user: GreatBay
+
+password: EricScot2019!
+
+Schema: GreatBay 
+Table: AuctionItems
+
+Columns:
+
+id
+Product
+CurrentBid
+StartingBid
+BuyItNow
+Category
