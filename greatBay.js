@@ -3,13 +3,6 @@ let inquirer = require("inquirer");
 require("dotenv").config();
 var chalk = require("chalk");
 
-//inquirer stuff
-//
-//
-//
-//
-//
-//
 
 var connection = mysql.createConnection({
   host: "GreatBay.db.4473603.faf.hostedresource.net",
@@ -30,25 +23,51 @@ connection.connect(function (err) {
   console.log("connected as id " + connection.threadId + "\n");
   // these post and bid, both are hardcoded, this should change.
   inquirer
-  .prompt([
-    {
-      type: "input",
-      message: "What'ya sellin?",
-      name: "productName"
-    },
-    {
-      type: "input",
-      message: "Where'ya sellin?",
-      name: "category"
-    },
-    {
-      type: "input",
-      message: "How much?",
-      name: "price"
-    }
-  ]).then(function (data){
-    post(data.productName, data.category, data.price);
-  })
+    .prompt([
+      {
+        type: "list",
+        message: "are you bidding, or selling?",
+        choices: ["post", "bid"],
+        name: "menuChoice"
+      }
+    ]).then(function (res) {
+      if (res.menuChoice === "post") {
+        inquirer
+          .prompt([
+            {
+              type: "input",
+              message: "What'ya sellin?",
+              name: "productName"
+            },
+            {
+              type: "input",
+              message: "Where'ya sellin?",
+              name: "category"
+            },
+            {
+              type: "input",
+              message: "How much?",
+              name: "price"
+            }
+          ]).then(function (data) {
+            post(data.productName, data.category, data.price);
+          })
+      }
+      else if (res.menuChoice === "bid") {
+        connection.query("SELECT Product FROM AuctionItems", function(err, res) {
+          if (err) throw err;
+          // Log all results of the SELECT statement
+          let listings = [];
+          for (let thing of res){
+            listings.push(thing.Product);
+          }
+          console.log(listings);
+          connection.end();
+        });
+      }
+    });
+
+
 
   // bid("Cocaine", 10);
   // post("Cocaine", "Drugs", "5");
