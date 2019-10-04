@@ -62,6 +62,26 @@ connection.connect(function (err) {
             listings.push(thing.Product);
           }
           console.log(listings);
+          
+          inquirer
+          .prompt([
+            {
+              type:"list",
+              message: "what are you bidding?",
+              name: "bid",
+              choices: listings,
+            },
+            {
+              type: "number",
+              message: "How many bitcoins are you bidding?",
+              name: "amount",
+            },
+            {
+              type:"confirm",
+              message: "are you sure?",
+              name: "accept",
+            }
+          ])
           connection.end();
         });
       }
@@ -112,6 +132,10 @@ function post(item, category, price) {
 
 
 
+module.exports ={
+  bid,
+  post
+};
 
 
 
